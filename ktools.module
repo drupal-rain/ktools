@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * KTools module file.
+ */
+
+//------------------------------------------------------------------------------
+// String functions
+
+/**
+ * Generate a random string used chars provided by source.
+ *
+ * @param string $src
+ *   Source characters.
+ * @param int $len
+ *   Length of the return random string.
+ * @return string
+ */
+function ktools_string_random($src, $len) {
+  $ret = '';
+  $rand_max = strlen($src);
+  for ($i = 0; $i < $len; $i++) {
+    $ret .= $src[mt_rand(0, $rand_max)];
+  }
+
+  return $ret;
+}
+
+/**
+ * More options to compare a string.
+ *
+ * @param string $value
+ * @param NULL|string|array $compare_to
+ */
+function ktools_string_compare($value, $compare_to) {
+  $ret = TRUE;
+  if (is_array($compare_to)) {
+    if (!in_array($value, $compare_to)) {
+      $ret = FALSE;
+    }
+  }
+  else {
+    if ($value != $compare_to) {
+      $ret = FALSE;
+    }
+  }
+
+  return $ret;
+}
+
+//------------------------------------------------------------------------------
+// Entity functions
+
+/**
+ * Get the numeric id from entity_wrapper.
+ *
+ * @param EntityMetaDataWrapper $entity_wrapper
+ */
+function ktools_entity_id($entity_wrapper) {
+  return $entity_wrapper->{$entity_wrapper->entityKey('id')}->value();
+}

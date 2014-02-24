@@ -1,0 +1,5 @@
+name = KTools
+description = Common utilities.
+package = KTools
+core = 7.x
+version = 7.x-2.x
