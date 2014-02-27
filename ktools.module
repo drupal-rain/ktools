@@ -5,6 +5,18 @@
  * KTools module file.
  */
 
+// -----------------------------------------------------------------------------
+// General hooks
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function ktools_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'ctools') {
+    return $owner . '/' . $plugin_type;
+  }
+}
+
 //------------------------------------------------------------------------------
 // String functions
 
