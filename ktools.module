@@ -73,13 +73,13 @@ function ktools_string_compare($value, $compare_to) {
  *   (optional) It's no need if passing in entity_wrapper or Entity API entity.
  */
 function ktools_entity_id($entity, $entity_type = '') {
-  if (is_subclass_of($entity, 'EntityMetaDataWrapper')) {
+  if (is_a($entity, 'EntityMetaDataWrapper')) {
     return $entity_wrapper->{$entity_wrapper->entityKey('id')}->value();
   }
-  else if (is_subclass_of($entity, 'Entity')) {
+  else if (is_a($entity, 'Entity')) {
     return $entity->internalIdentifier();
   }
-  else if (is_subclass_of($entity, 'stdClass') && $entity_type) {
+  else if (is_a($entity, 'stdClass') && $entity_type) {
     $entity_class = new Entity($entity, $entity_type);
     return $entity_class->internalIdentifier();
   }
