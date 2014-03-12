@@ -67,14 +67,14 @@ function ktools_string_compare($value, $compare_to) {
 /**
  * Get the numeric id from entity_wrapper.
  *
- * @param EntityMetaDataWrapper|stdClass|Entity $entity
+ * @param EntityDrupalWrapper|stdClass|Entity $entity
  *   It can be entity_wrapper or Entity API entity or Core simple StdClass entity.
  * @param $entity_type
  *   (optional) It's no need if passing in entity_wrapper or Entity API entity.
  */
 function ktools_entity_id($entity, $entity_type = '') {
-  if (is_a($entity, 'EntityMetaDataWrapper')) {
-    return $entity_wrapper->{$entity_wrapper->entityKey('id')}->value();
+  if (is_a($entity, 'EntityDrupalWrapper')) {
+    return $entity->value()->internalIdentifier();
   }
   else if (is_a($entity, 'Entity')) {
     return $entity->internalIdentifier();
