@@ -1,6 +1,6 @@
-name = KTools
+name = Ktools
 description = Common utilities.
-package = KTools
+package = Ktools
 core = 7.x
 version = 7.x-1.x
 
