@@ -21,68 +21,25 @@ function ktools_ctools_plugin_directory($owner, $plugin_type) {
 // String functions
 
 /**
- * Generate a random string used chars provided by source.
- *
- * @param string $src
- *   Source characters.
- * @param int $len
- *   Length of the return random string.
- * @return string
+ * @deprecated
  */
 function ktools_string_random($src, $len) {
-  $ret = '';
-  $rand_max = strlen($src);
-  for ($i = 0; $i < $len; $i++) {
-    $ret .= $src[mt_rand(0, $rand_max)];
-  }
-
-  return $ret;
+  return KtoolsString::strRandom($src, $len);
 }
 
 /**
- * More options to compare a string.
- *
- * @param string $value
- * @param NULL|string|array $compare_to
+ * @deprecated
  */
 function ktools_string_compare($value, $compare_to) {
-  $ret = TRUE;
-  if (is_array($compare_to)) {
-    if (!in_array($value, $compare_to)) {
-      $ret = FALSE;
-    }
-  }
-  else {
-    if ($value != $compare_to) {
-      $ret = FALSE;
-    }
-  }
-
-  return $ret;
+  return KtoolsString::strCompare($value, $compare_to);
 }
 
 //------------------------------------------------------------------------------
 // Entity functions
 
 /**
- * Get the numeric id from entity_wrapper.
- *
- * @param EntityDrupalWrapper|stdClass|Entity $entity
- *   It can be entity_wrapper or Entity API entity or Core simple StdClass entity.
- * @param $entity_type
- *   (optional) It's no need if passing in entity_wrapper or Entity API entity.
+ * @deprecated
  */
 function ktools_entity_id($entity, $entity_type = '') {
-  if (is_a($entity, 'EntityDrupalWrapper')) {
-    return $entity->value()->internalIdentifier();
-  }
-  else if (is_a($entity, 'Entity')) {
-    return $entity->internalIdentifier();
-  }
-  else if (is_a($entity, 'stdClass') && $entity_type) {
-    $entity_class = new Entity($entity, $entity_type);
-    return $entity_class->internalIdentifier();
-  }
-
-  return FALSE;
+  KtoolsEntity::interId($entity, $entity_type);
 }

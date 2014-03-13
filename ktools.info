@@ -3,3 +3,6 @@ description = Common utilities.
 package = KTools
 core = 7.x
 version = 7.x-1.x
+
+files[] = includes/ktools.string.inc
+files[] = includes/ktools.entity.inc
