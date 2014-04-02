@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * String related helper.
+ */
+
 class KtoolsString {
 
   /**
