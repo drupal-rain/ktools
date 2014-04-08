@@ -44,6 +44,61 @@ class KtoolsEntity {
 
     return $entity_type_options;
   }
+
+  /**
+   * Generate a list options of defined bundles of an entity_type.
+   */
+  public static function bundleOptions($entity_type) {
+    $entity_info = entity_get_info($entity_type);
+    $bundle_options = array();
+    foreach ($entity_info['bundles'] as $bundle_name => $bundle_info) {
+      $bundle_options[$bundle_name] = $bundle_info['label'];
+    }
+
+    return $bundle_options;
+  }
+
+  /**
+   * Check if the bundle is within defined bundles of an entity_type.
+   */
+  public static function bundleExists($entity_type, $bundle) {
+    $entity_info = entity_get_info($entity_type);
+
+    return array_key_exists($bundle, $entity_info['bundles']);
+  }
+
+  /**
+   * Generate an array with bundles as keys and fill NULL as values.
+   */
+  public static function bundleFillKeys($entity_type, $value = NULL) {
+    $entity_info = entity_get_info($entity_type);
+    $bundles = array_fill_keys(array_keys($entity_info['bundles']), $value);
+
+    return $bundles;
+  }
+
+  /**
+   * Generate the common use array of entities keyed by bundle name.
+   *
+   * @param string $entity_type
+   * @param array $entity_ids
+   * @param bool $single
+   */
+  public static function listByBundleKey($entity_type, $entity_ids, $single = TRUE) {
+    $entities = entity_load($entity_type, $entity_ids);
+    $list = self::bundleFillKeys($entity_type);
+    foreach ($entities as $entity_id => $entity) {
+      if ($single) {
+        $list[$entity->type] = $entity_id;
+      }
+      else {
+        $list[$entity->type][] = $entity_id;
+      }
+    }
+
+    return $list;
+  }
+
 }
 
 /**
@@ -72,7 +127,6 @@ class KtoolsEntityField {
     $result = $query->execute();
     $ret = array();
     foreach ($result as $type => $entities) {
-      //$ret[$entity_type] = array_combine(array_keys($entities), array_keys($entities));
       $ret[$type] = array_keys($entities);
     }
     if ($result && $entity_type) {
@@ -88,5 +142,28 @@ class KtoolsEntityField {
  * Utility functions related to entity property.
  */
 class KtoolsEntityProperty {
+
+  /**
+   * Use EntityFieldQuery to fetch entities.
+   */
+  public static function queryEntities($entity_type, $property, $value) {
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', $entity_type)
+      ->propertyCondition($property, $value);
+    $result = $query->execute();
+    $ret = array();
+    foreach ($result as $type => $entities) {
+      $ret[$type] = array_keys($entities);
+    }
+    if ($result && isset($ret[$entity_type])) {
+      return $ret[$entity_type];
+    }
+
+    return $ret;
+  }
+
+}
+
+class KtoolsEntityMetadata {
   
 }
