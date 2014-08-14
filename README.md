@@ -1,5 +1,5 @@
 # Information
-Utility tool kits.
+Drupal utility toolkit.
 
 # Components
 * String
@@ -17,10 +17,10 @@ Utility tool kits.
 ## Views
 * relationships
   - node_revision_from_view
-    Provide the relation to fetch the node_revision from node.
+    - Provide the relation to fetch the node_revision from node.
 
 ## Rules
 * data_info
   - field_item_file
   - field_item_image
-    Useful to create param and set entity field value.
+    - Useful to create param and set entity field value.
