@@ -96,6 +96,7 @@ class KtoolsDir {
    * Scan directory and save files inside to drupal.
    *
    * @todo Need improvement.
+   * @issue Need to avoid important dir call like stream wrapper root.
    */
   public static function scanSave($dir, $move = TRUE, $dir_dest = NULL, $mask = '/[.]*/', $options = array()) {
     $files = file_scan_directory($dir, $mask, $options);
@@ -128,6 +129,9 @@ class KtoolsDir {
         // Replace or Rename
         $replace = $remove ? FILE_EXISTS_REPLACE : FILE_EXISTS_RENAME;
         $files_obj[] = file_move($file_obj, $dest, $replace);
+        //
+        $remove = TRUE;
+        $dir_remove = $dir;
       }
       else {
         $files_obj[] = $file_obj;
