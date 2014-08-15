@@ -127,7 +127,7 @@ class KtoolsDir {
           $dest = file_default_scheme() . '://' . $file_obj->filename;
         }
         // Replace or Rename
-        $replace = $remove ? FILE_EXISTS_REPLACE : FILE_EXISTS_RENAME;
+        $replace = isset($remove) ? FILE_EXISTS_REPLACE : FILE_EXISTS_RENAME;
         $files_obj[] = file_move($file_obj, $dest, $replace);
         //
         $remove = TRUE;
