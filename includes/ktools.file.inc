@@ -97,6 +97,7 @@ class KtoolsDir {
    *
    * @todo Need improvement.
    * @issue Need to avoid important dir call like stream wrapper root.
+   * @todo File Status, Replace settings.
    */
   public static function scanSave($dir, $move = TRUE, $dir_dest = NULL, $mask = '/[.]*/', $options = array()) {
     $files = file_scan_directory($dir, $mask, $options);
@@ -117,7 +118,10 @@ class KtoolsDir {
     }
     $files_obj = array();
     foreach ($files as $file) {
-      $file_obj = file_save($file);
+      // Try to load managed file.
+      if (!$file_obj = KtoolsFile::loadByURI($file->uri)) {
+        $file_obj = file_save($file);
+      }
       if ($move) {
         if ($dir_dest) {
           $dest = $dir_dest . DIRECTORY_SEPARATOR . $file_obj->filename;
