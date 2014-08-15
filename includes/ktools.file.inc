@@ -5,6 +5,9 @@
  * String related helper.
  */
 
+define('FILE_OP_COPY', 1);
+define('FILE_OP_MOVE', -1);
+
 class KtoolsFile {
 
   /**
@@ -59,8 +62,14 @@ class KtoolsDir {
   /**
    * Delete non-empty directory by recursively delete sub files and
    * sub directories.
+   *
+   * @see file_unmanaged_delete_recursive().
+   * @link https://api.drupal.org/api/drupal/includes%21file.inc/function/file_unmanaged_delete_recursive/7
+   *
+   * file_unmanaged_delete_recursive() is said to not delete symbolic links properly?
    */
-  public static function delete($dirname) {
+  public static function deleteDir($dirname) {
+    $dirname = drupal_realpath($dirname);
     if (is_dir($dirname)) {
       $dir_handle = opendir($dirname);
     }
@@ -73,7 +82,7 @@ class KtoolsDir {
           unlink($dirname . '/' . $file);
         }
         else {
-          self::delete($dirname . '/' . $file);
+          self::deleteDir($dirname . '/' . $file);
         }
       }
     }
@@ -83,15 +92,80 @@ class KtoolsDir {
     return TRUE;
   }
 
+  /**
+   * Scan directory and save files inside to drupal.
+   *
+   * @todo Need improvement.
+   */
+  public static function scanSave($dir, $move = TRUE, $dir_dest = NULL, $mask = '/[.]*/', $options = array()) {
+    $files = file_scan_directory($dir, $mask, $options);
+    // If it's unknown to drupal, copy to temporary:// first.
+    if (!file_valid_uri($dir)) {
+      foreach ($files as $file) {
+        $dir_dest_tmp = 'temporary://' . self::getFolder($dir);
+        dsm(drupal_realpath($dir_dest_tmp));
+        file_prepare_directory($dir_dest_tmp, FILE_CREATE_DIRECTORY);
+        $file->uri = file_unmanaged_copy($file->uri, $dir_dest_tmp . DIRECTORY_SEPARATOR . $file->filename);
+        // Force move in this situation.
+        $move = TRUE;
+        $dir_dest = file_default_scheme() . '://' . self::getFolder($dir);
+        // Flag Remove
+        $remove = TRUE;
+        $dir_remove = $dir_dest_tmp;
+      }
+    }
+    $files_obj = array();
+    foreach ($files as $file) {
+      $file_obj = file_save($file);
+      if ($move) {
+        if ($dir_dest) {
+          $dest = $dir_dest . DIRECTORY_SEPARATOR . $file_obj->filename;
+          file_prepare_directory($dir_dest, FILE_CREATE_DIRECTORY);
+        }
+        else {
+          $dest = file_default_scheme() . '://' . $file_obj->filename;
+        }
+        // Replace or Rename
+        $replace = $remove ? FILE_EXISTS_REPLACE : FILE_EXISTS_RENAME;
+        $files_obj[] = file_move($file_obj, $dest, $replace);
+      }
+      else {
+        $files_obj[] = $file_obj;
+      }
+    }
+
+    if (isset($remove)) {
+      self::deleteDir($dir_remove);
+    }
+
+    return $files_obj;
+  }
+
+  /**
+   * Get the last directory from the path
+   */
+  public static function getFolder($uri) {
+    $path = drupal_realpath($uri);
+    $pieces = explode(DIRECTORY_SEPARATOR, $path);
+
+    return end($pieces);
+  }
+
 }
 
 class KtoolsArchive {
 
-  public static function compress() {
+  /**
+   * Compress array of file objects into archive.
+   */
+  public static function compress($files) {
 
   }
 
-  public static function extract() {
+  /**
+   * Extract archive and save as managed files.
+   */
+  public static function extract($archive) {
 
   }
 
