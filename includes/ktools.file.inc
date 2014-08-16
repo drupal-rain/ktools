@@ -8,6 +8,26 @@
 define('FILE_OP_COPY', 1);
 define('FILE_OP_MOVE', -1);
 
+class KtoolsFilePath {
+
+  public static function getDirname($path) {
+    return pathinfo(drupal_realpath($path), PATHINFO_DIRNAME);
+  }
+
+  public static function getBasename($path) {
+    return pathinfo(drupal_realpath($path), PATHINFO_BASENAME);
+  }
+
+  public static function getExtension($path) {
+    return pathinfo(drupal_realpath($path), PATHINFO_EXTENSION);
+  }
+
+  public static function getFilename($path) {
+    return pathinfo(drupal_realpath($path), PATHINFO_FILENAME);
+  }
+
+}
+
 class KtoolsFile {
 
   /**
@@ -150,7 +170,9 @@ class KtoolsDir {
   }
 
   /**
-   * Get the last directory from the path
+   * Get the last directory from the path.
+   *
+   * @issue If root?
    */
   public static function getFolder($uri) {
     $path = drupal_realpath($uri);
@@ -166,15 +188,16 @@ class KtoolsArchive {
   /**
    * Compress array of file objects into archive.
    */
-  public static function compress($files) {
+  public static function compressZip($files) {
 
   }
 
   /**
    * Extract archive and save as managed files.
    */
-  public static function extract($archive) {
-
+  public static function extractZip($archive, $path) {
+    $archiver = archiver_get_archiver($archive);
+    $archiver->extract($path);
   }
 
 }

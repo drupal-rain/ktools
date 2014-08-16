@@ -2,7 +2,10 @@
 Drupal utility toolkit.
 
 # Components
+* Class
+  - URL
 * String
+  - KtoolsString
 * File (and Filesystem)
   - KtoolsFile
   - KtoolsDir
@@ -12,6 +15,8 @@ Drupal utility toolkit.
   - KtoolsEntityField
   - KtoolsEntityProperty
   - KtoolsEntityMetadata
+* Web
+  - KtoolsURL
 
 # Integrations
 ## Views
