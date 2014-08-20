@@ -49,3 +49,8 @@ class KtoolsString {
   }
 
 }
+
+class KtoolsArray()
+{
+  
+}

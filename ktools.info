@@ -5,7 +5,7 @@ core = 7.x
 version = 7.x-1.x
 
 files[] = includes/ktools.class.inc
-files[] = includes/ktools.string.inc
+files[] = includes/ktools.type.inc
 files[] = includes/ktools.entity.inc
 files[] = includes/ktools.file.inc
 files[] = includes/ktools.web.inc

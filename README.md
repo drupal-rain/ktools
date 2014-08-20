@@ -4,8 +4,9 @@ Drupal utility toolkit.
 # Components
 * Class
   - URL
-* String
+* Type
   - KtoolsString
+  - KtoolsArray
 * File (and Filesystem)
   - KtoolsFile
   - KtoolsDir
