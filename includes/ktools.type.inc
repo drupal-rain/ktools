@@ -48,9 +48,30 @@ class KtoolsString {
     return $ret;
   }
 
+  /**
+   * Check if string starts with $needle.
+   *
+   * @param $haystack
+   * @param $needle
+   * @return bool
+   */
+  public static function startsWith($haystack, $needle) {
+    return $needle === "" || strpos($haystack, $needle) === 0;
+  }
+
+  /**
+   * Check if string ends with $needle.
+   *
+   * @param $haystack
+   * @param $needle
+   * @return bool
+   */
+  public static function endsWith($haystack, $needle) {
+    return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+  }
+
 }
 
-class KtoolsArray()
-{
+class KtoolsArray {
   
 }
