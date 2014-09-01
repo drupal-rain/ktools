@@ -106,6 +106,38 @@ class KtoolsEntity {
  */
 class KtoolsEntityField {
 
+  public static function queryEntities($field, $conditions, $entity_type = NULL, $langcode = NULL) {
+    $query = new EntityFieldQuery();
+    if ($entity_type) {
+      $query->entityCondition('entity_type', $entity_type);
+    }
+    $condition_default = array(
+      'column' => NULL,
+      'value' => NULL,
+      'operator' => NULL,
+      'delta_group' => NULL,
+      'language_group' => NULL,
+    );
+    foreach ($conditions as $condition) {
+      $condition += $condition_default;
+      $query->fieldCondition($field, $condition['column'], $condition['value'],
+        $condition['operator'], $condition['delta_group'], $condition['language_group']);
+    }
+    if ($langcode) {
+      $query->fieldLanguageCondition($field, $langcode, '=');
+    }
+    $result = $query->execute();
+    $ret = array();
+    foreach ($result as $type => $entities) {
+      $ret[$type] = array_keys($entities);
+    }
+    if ($result && $entity_type) {
+      return $ret[$entity_type];
+    }
+
+    return $ret;
+  }
+
   /**
    * Get a list of entities from the reverted entityreference relationship.
    *
