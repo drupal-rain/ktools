@@ -106,7 +106,7 @@ class KtoolsEntity {
  */
 class KtoolsEntityField {
 
-  public static function queryEntities($field, $conditions, $entity_type = NULL, $langcode = NULL) {
+  public static function queryEntities($field, $conditions, $entity_type = NULL, $object_full = FALSE, $lang = NULL) {
     $query = new EntityFieldQuery();
     if ($entity_type) {
       $query->entityCondition('entity_type', $entity_type);
@@ -123,16 +123,28 @@ class KtoolsEntityField {
       $query->fieldCondition($field, $condition['column'], $condition['value'],
         $condition['operator'], $condition['delta_group'], $condition['language_group']);
     }
-    if ($langcode) {
-      $query->fieldLanguageCondition($field, $langcode, '=');
+    if ($lang) {
+      $query->fieldLanguageCondition($field, $lang, '=');
     }
     $result = $query->execute();
     $ret = array();
     foreach ($result as $type => $entities) {
       $ret[$type] = array_keys($entities);
     }
+
     if ($result && $entity_type) {
-      return $ret[$entity_type];
+      if ($object_full) {
+        return entity_load($entity_type, $ret[$entity_type]);
+      }
+      else {
+        return $ret[$entity_type];
+      }
+    }
+
+    if ($object_full) {
+      foreach ($ret as $type => $ids) {
+        $ret[$type] = entity_load($type, $ids);
+      }
     }
 
     return $ret;
@@ -147,22 +159,34 @@ class KtoolsEntityField {
    * @param unknown $langcode
    * @return Ambigous <Either, mixed>
    */
-  public static function entityreferenceRevertEntities($field, $entity_id, $entity_type = NULL, $langcode = NULL) {
+  public static function entityreferenceRevertEntities($field, $entity_id, $entity_type = NULL, $object_full = FALSE, $lang = NULL) {
     $query = new EntityFieldQuery();
     if ($entity_type) {
       $query->entityCondition('entity_type', $entity_type);
     }
     $query->fieldCondition($field, 'target_id', $entity_id, '=');
-    if ($langcode) {
-      $query->fieldLanguageCondition($field, $langcode, '=');
+    if ($lang) {
+      $query->fieldLanguageCondition($field, $lang, '=');
     }
     $result = $query->execute();
     $ret = array();
     foreach ($result as $type => $entities) {
       $ret[$type] = array_keys($entities);
     }
+
     if ($result && $entity_type) {
-      return $ret[$entity_type];
+      if ($object_full) {
+        return entity_load($entity_type, $ret[$entity_type]);
+      }
+      else {
+        return $ret[$entity_type];
+      }
+    }
+
+    if ($object_full) {
+      foreach ($ret as $type => $ids) {
+        $ret[$type] = entity_load($type, $ids);
+      }
     }
 
     return $ret;
@@ -178,17 +202,35 @@ class KtoolsEntityProperty {
   /**
    * Use EntityFieldQuery to fetch entities.
    */
-  public static function queryEntities($entity_type, $property, $value) {
+  public static function queryEntities($entity_type, $property, $value, $object_full = FALSE) {
     $query = new EntityFieldQuery();
-    $query->entityCondition('entity_type', $entity_type)
-      ->propertyCondition($property, $value);
+    $query->entityCondition('entity_type', $entity_type);
+    // Single value or multiple values.
+    if (is_array($value)) {
+      $query->propertyCondition($property, $value, 'IN');
+    }
+    else {
+      $query->propertyCondition($property, $value, '=');
+    }
     $result = $query->execute();
     $ret = array();
     foreach ($result as $type => $entities) {
       $ret[$type] = array_keys($entities);
     }
-    if ($result && isset($ret[$entity_type])) {
-      return $ret[$entity_type];
+
+    if ($result && $entity_type) {
+      if ($object_full) {
+        return entity_load($entity_type, $ret[$entity_type]);
+      }
+      else {
+        return $ret[$entity_type];
+      }
+    }
+
+    if ($object_full) {
+      foreach ($ret as $type => $ids) {
+        $ret[$type] = entity_load($type, $ids);
+      }
     }
 
     return $ret;
