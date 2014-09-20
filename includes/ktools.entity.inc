@@ -151,6 +151,37 @@ class KtoolsEntityField {
   }
 
   /**
+   * Get referenced entities.
+   *
+   * @param $entity_type
+   * @param $entity
+   * @param $field_name
+   * @param bool $object_full
+   * @return array
+   */
+  public static function entityreferenceEntities($entity_type, $entity, $field_name, $object_full = FALSE) {
+    $lang = entity_language($entity_type, $entity);
+    $entities = array();
+    $items = field_get_items($entity_type, $entity, $field_name, $lang);
+    if ($items) {
+      $field = field_info_field($field_name);
+      $entity_type_ref = $field['settings']['target_type'];
+      $entities_id = array();
+      foreach ($items as $value) {
+        $entities_id[] = $value['target_id'];
+      }
+      if ($object_full) {
+        $entities = entity_load($entity_type_ref, $entities_id);
+      }
+      else {
+        return $entities_id;
+      }
+    }
+
+    return $entities;
+  }
+
+  /**
    * Get a list of entities from the reverted entityreference relationship.
    *
    * @param unknown $field
