@@ -4,6 +4,7 @@ package = Ktools
 core = 7.x
 version = 7.x-1.x
 
+files[] = includes/ktools.module.inc
 files[] = includes/ktools.class.inc
 files[] = includes/ktools.type.inc
 files[] = includes/ktools.entity.inc
