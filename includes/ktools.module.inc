@@ -4,8 +4,8 @@ class KtoolsModule {
 
   public static function getWeight($module) {
     $query = db_select('system');
-    $query->addField('system', 'wegiht');
-    $query->condition('module', $module);
+    $query->addField('system', 'weight');
+    $query->condition('name', $module);
     $result = $query->execute();
 
     return $result->fetchField();
