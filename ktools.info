@@ -10,3 +10,4 @@ files[] = includes/ktools.type.inc
 files[] = includes/ktools.entity.inc
 files[] = includes/ktools.file.inc
 files[] = includes/ktools.web.inc
+files[] = includes/ktools.list.inc

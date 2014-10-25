@@ -73,5 +73,37 @@ class KtoolsString {
 }
 
 class KtoolsArray {
-  
+
+  public static function defaultValue($arr, $index, $default_value) {
+    $var =&$arr;
+    if (is_array($index)) {
+      foreach ($index as $child) {
+        $var = &$var[$child];
+      }
+    }
+    else {
+      $var = &$var[$index];
+    }
+
+    return isset($var) ? $var : $default_value;
+  }
+
+}
+
+class KtoolsObject {
+
+  public static function defaultValue($obj, $property, $default_value) {
+    $var =&$obj;
+    if (is_array($obj->{$property})) {
+      foreach ($property as $child) {
+        $var = &$var->{$child};
+      }
+    }
+    else {
+      $var = &$var->{$property};
+    }
+
+    return isset($var) ? $var : $default_value;
+  }
+
 }
