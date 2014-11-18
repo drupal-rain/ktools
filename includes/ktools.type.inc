@@ -18,7 +18,7 @@ class KtoolsString {
    */
   public static function strRandom($src, $len) {
     $ret = '';
-    $rand_max = strlen($src);
+    $rand_max = strlen($src) - 1;
     for ($i = 0; $i < $len; $i++) {
       $ret .= $src[mt_rand(0, $rand_max)];
     }
